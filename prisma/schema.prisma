@@ -1,0 +1,140 @@
+// Prisma schema file with indexes and fixes for the Ride model
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(uuid())
+  user_firstname String
+  user_lastname  String
+  email          String   @unique
+  password       String
+  created_at     DateTime @default(now())
+  role           Role     @default(PASSENGER)
+  credit         Decimal  @default(0)
+  driver         Driver?
+
+  received_rates Rates[]     @relation("TargetUser")
+  given_rates    Rates[]     @relation("SourceUser")
+  Residence      Residence[]
+  Ride           Ride[]
+
+  @@index([email])
+}
+
+model Rates {
+  id             Int    @id @default(autoincrement())
+  target_user    User   @relation("TargetUser", fields: [target_user_id], references: [id])
+  target_user_id String
+
+  source_user    User   @relation("SourceUser", fields: [source_user_id], references: [id])
+  source_user_id String
+
+  content String @db.Text
+  rate    Int
+}
+
+model Residence {
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  number       Int
+  complement   String?
+  street       String
+  neighborhood String?
+  city         String
+  state        String
+  postal_code  String
+
+  @@index([user_id])
+}
+
+model Ride {
+  id              String     @id @default(uuid())
+  driver          Driver     @relation(fields: [driver_id], references: [user_id])
+  driver_id       String
+  passenger       User       @relation(fields: [passenger_id], references: [id])
+  passenger_id    String
+  origin          String
+  destination     String
+  ride_date       DateTime
+  number_of_seats Int
+  ride_price      Decimal
+  ride_status     RideStatus
+
+  @@index([driver_id])
+  @@index([passenger_id])
+  @@index([ride_date])
+}
+
+enum RideStatus {
+  PENDING
+  ACCEPTED
+  CANCELED
+  FINISHED
+}
+
+model Driver {
+  user       User      @relation(fields: [user_id], references: [id])
+  user_id    String    @unique
+  cnh        CNH       @relation(fields: [cnh_serial], references: [serial])
+  cnh_serial String    @unique
+  vehicles   Vehicle[]
+  Ride       Ride[]
+
+  @@index([cnh_serial])
+}
+
+model CNH {
+  serial          String        @unique
+  driver          Driver?
+  category        cnhCategory[]
+  expiration_date DateTime
+  emission_date   DateTime
+  issued_by       String
+}
+
+model Vehicle {
+  id               String      @id @default(uuid())
+  category         cnhCategory
+  brand            String
+  model            String
+  fabrication_year Int
+  color            String
+  plate            String      @unique
+  driver           Driver      @relation(fields: [driver_id], references: [user_id])
+  driver_id        String
+
+  Crlv Crlv?
+
+  @@index([driver_id])
+}
+
+model Crlv {
+  id              String   @id @default(uuid())
+  vehicle         Vehicle  @relation(fields: [vehicle_id], references: [id])
+  vehicle_id      String   @unique
+  expiration_date DateTime
+  emission_date   DateTime
+  issued_by       String
+}
+
+enum cnhCategory {
+  A
+  B
+  C
+  D
+  E
+}
+
+enum Role {
+  PASSENGER
+  DRIVER
+}
