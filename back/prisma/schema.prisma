@@ -16,6 +16,8 @@ model User {
   email          String   @unique
   password       String
   created_at     DateTime @default(now())
+  cpf            String   @unique
+  birth_date     DateTime
   role           Role     @default(PASSENGER)
   credit         Decimal  @default(0)
   driver         Driver?

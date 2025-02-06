@@ -25,7 +25,7 @@ export class AuthService {
 
       if (await bcrypt.compare(body.password, user.password)) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, email, ...result } = user;
+        const { password, email, cpf, ...result } = user;
 
         return this.jwtService.sign(result);
       }

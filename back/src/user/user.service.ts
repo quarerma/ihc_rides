@@ -16,6 +16,7 @@ export class UserService {
       }
 
       const cryptedPassword = await this.hashPassword(password);
+      const cryptedCpf = await this.hashPassword(body.cpf);
 
       return await this.dataBaseService.user.create({
         data: {
@@ -23,6 +24,8 @@ export class UserService {
           user_firstname: body.user_firstname,
           user_lastname: body.user_lastname,
           password: cryptedPassword,
+          cpf: cryptedCpf,
+          birth_date: body.birth_date,
         },
       });
     } catch (error) {
