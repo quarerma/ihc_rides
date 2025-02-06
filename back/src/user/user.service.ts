@@ -4,7 +4,7 @@ import { CreateUserDTO } from './dto/create.user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly dataBaseService: DataBaseService) {}
 
   async create(body: CreateUserDTO) {
@@ -54,6 +54,24 @@ export class UsersService {
   async getUsers() {
     try {
       return await this.dataBaseService.user.findMany({
+        select: {
+          email: true,
+          user_firstname: true,
+          user_lastname: true,
+          created_at: true,
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getUserById(id: string) {
+    try {
+      return await this.dataBaseService.user.findUnique({
+        where: {
+          id,
+        },
         select: {
           email: true,
           user_firstname: true,
