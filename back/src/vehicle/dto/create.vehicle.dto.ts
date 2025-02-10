@@ -1,5 +1,5 @@
 import { cnhCategory } from "@prisma/client";
-import { Crlv } from "./create.crlv.dto";
+import { createCrlv } from "./create.crlv.dto";
 
 export class CreateVehicleDTO {
   category: cnhCategory;
@@ -8,6 +8,5 @@ export class CreateVehicleDTO {
   fabrication_year: number;
   color: string
   plate: string;
-  crlv: Crlv;
-  user_id: string;
+  crlv: createCrlv;
 }

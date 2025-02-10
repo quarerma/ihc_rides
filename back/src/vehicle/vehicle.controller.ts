@@ -1,16 +1,27 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Query, Req } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { Post, Body } from '@nestjs/common';
 import { CreateVehicleDTO } from './dto/create.vehicle.dto';
+import { Request } from 'express';
+import { UserRequest } from 'src/types/user.request';
 
 @Controller('vehicle')
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 
   @Post()
-  createVehicle(@Body() body : CreateVehicleDTO) {
+  createVehicle(@Body() body : CreateVehicleDTO,@Req() request:  Request) {
     try {
-      return this.vehicleService.create(body);
+      return this.vehicleService.create(body, (request.user as UserRequest).id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  @Get()
+  async getById(@Query() vehicle_id : string) {
+    try {
+      return await this.vehicleService.getVehicleById(vehicle_id);
     } catch (error) {
       throw new Error(error);
     }

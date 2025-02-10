@@ -20,7 +20,7 @@ export class UserController {
 
   @Get()
   @UseGuards(JwtAuthGuards)
-  async getSelf(@Req() req: Request) {
+  async getSession(@Req() req: Request) {
     try {
       const user = req.user as UserRequest;
       return await this.usersService.getUserById(user.id);

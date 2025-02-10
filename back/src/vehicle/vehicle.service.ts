@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CreateVehicleDTO } from './dto/create.vehicle.dto';
-import { create } from 'domain';
-import { Crlv } from './dto/create.crlv.dto';
 import { cnhCategory } from '@prisma/client';
 
 @Injectable()
 export class VehicleService {
   constructor(private readonly dataBaseService: DataBaseService) {}
 
-  async create(body: CreateVehicleDTO) {
+  async create(body: CreateVehicleDTO, user_id: string) {
     try {
 
       return await this.dataBaseService.vehicle.create({
@@ -29,7 +27,7 @@ export class VehicleService {
           },
           driver: {
             connect: {
-              user_id: body.user_id
+              user_id: user_id
             }
           }
         }
@@ -37,6 +35,21 @@ export class VehicleService {
 
     }
     catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getVehicleById(id: string) {
+    try {
+      return await this.dataBaseService.vehicle.findUnique({
+        where: {
+          id
+        },
+        include: {
+          Crlv: true
+        }
+      });
+    } catch (error) {
       throw new Error(error);
     }
   }
