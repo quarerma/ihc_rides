@@ -26,4 +26,23 @@ export class VehicleController {
       throw new Error(error);
     }
   }
+
+  // @Get('all')
+  // async getVehicles() {
+  //   try {
+  //     return this.vehicleService.getVehicles();
+  //   } catch (error) {
+  //     throw new Error(error);
+  //   }
+  // }
+
+  // Get all vehicles by driver
+  @Get('driver')
+  async getVehiclesByDriver(@Req() request: Request) {
+    try {
+      return this.vehicleService.getVehiclesByDriver((request.user as UserRequest).id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }

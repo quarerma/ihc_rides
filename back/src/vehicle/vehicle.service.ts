@@ -53,4 +53,34 @@ export class VehicleService {
       throw new Error(error);
     }
   }
+
+  // async getVehicles() {
+  //   try {
+  //     return await this.dataBaseService.vehicle.findMany({
+  //       include: {
+  //         Crlv: true
+  //       }
+  //     });
+  //   } catch (error) {
+  //     throw new Error(error);
+  //   }
+  // }
+
+  async getVehiclesByDriver(user_id: string) {
+    try {
+      return await this.dataBaseService.vehicle.findMany({
+        where: {
+          driver: {
+            user_id: user_id
+          }
+        },
+        include: {
+          Crlv: true
+        }
+      })
+    } catch(error) {
+      throw new Error(error);
+    }
+  }
+
 }
