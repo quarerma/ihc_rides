@@ -10,7 +10,7 @@ export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 
   @Post()
-  createVehicle(@Body() body : CreateVehicleDTO,@Req() request:  Request) {
+  async createVehicle(@Body() body : CreateVehicleDTO,@Req() request:  Request) {
     try {
       return this.vehicleService.create(body, (request.user as UserRequest).id);
     } catch (error) {
@@ -26,15 +26,6 @@ export class VehicleController {
       throw new Error(error);
     }
   }
-
-  // @Get('all')
-  // async getVehicles() {
-  //   try {
-  //     return this.vehicleService.getVehicles();
-  //   } catch (error) {
-  //     throw new Error(error);
-  //   }
-  // }
 
   // Get all vehicles by driver
   @Get('driver')

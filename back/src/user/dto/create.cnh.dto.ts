@@ -1,6 +1,6 @@
 import { cnhCategory } from "@prisma/client";
 
-export class createCnh {
+export class createCnhDTO {
   serial: string;
   category: cnhCategory[];
   expiration_date: Date;
