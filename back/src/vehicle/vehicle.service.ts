@@ -9,7 +9,6 @@ export class VehicleService {
 
   async create(body: CreateVehicleDTO, user_id: string) {
     try {
-
       return await this.dataBaseService.vehicle.create({
         data: {
           category: body.category as cnhCategory,
@@ -22,19 +21,17 @@ export class VehicleService {
             create: {
               expiration_date: body.crlv.expiration_date,
               emission_date: body.crlv.emission_date,
-              issued_by: body.crlv.issued_by
-            }
+              issued_by: body.crlv.issued_by,
+            },
           },
           driver: {
             connect: {
-              user_id: user_id
-            }
-          }
-        }
+              user_id: user_id,
+            },
+          },
+        },
       });
-
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error(error);
     }
   }
@@ -43,11 +40,11 @@ export class VehicleService {
     try {
       return await this.dataBaseService.vehicle.findUnique({
         where: {
-          id
+          id,
         },
         include: {
-          Crlv: true
-        }
+          Crlv: true,
+        },
       });
     } catch (error) {
       throw new Error(error);
@@ -71,16 +68,15 @@ export class VehicleService {
       return await this.dataBaseService.vehicle.findMany({
         where: {
           driver: {
-            user_id: user_id
-          }
+            user_id: user_id,
+          },
         },
         include: {
-          Crlv: true
-        }
-      })
-    } catch(error) {
+          Crlv: true,
+        },
+      });
+    } catch (error) {
       throw new Error(error);
     }
   }
-
 }
