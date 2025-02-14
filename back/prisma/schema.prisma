@@ -64,6 +64,8 @@ model Ride {
   driver_id       String
   passenger       User       @relation(fields: [passenger_id], references: [id])
   passenger_id    String
+  vehicle         Vehicle    @relation(fields: [vehicle_id], references: [id])
+  vehicle_id      String
   origin          String
   destination     String
   ride_date       DateTime
@@ -73,6 +75,7 @@ model Ride {
 
   @@index([driver_id])
   @@index([passenger_id])
+  @@index([vehicle_id])
   @@index([ride_date])
 }
 
@@ -117,6 +120,7 @@ model Vehicle {
   Crlv Crlv?
 
   @@index([driver_id])
+  Ride Ride[]
 }
 
 model Crlv {
