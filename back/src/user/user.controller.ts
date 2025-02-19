@@ -14,7 +14,7 @@ export class UserController {
     try {
       return this.usersService.create(body);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 

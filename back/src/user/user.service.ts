@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CreateUserDTO } from './dto/create.user.dto';
 import * as bcrypt from 'bcrypt';
@@ -9,14 +9,14 @@ export class UserService {
 
   async create(body: CreateUserDTO) {
     try {
+      console.log(body);
       const { password, email } = body;
 
       if (await this.checkEmail(email)) {
-        throw new Error('Email already exists');
+        throw new HttpException('Email already in use', HttpStatus.CONFLICT);
       }
 
       const cryptedPassword = await this.hashPassword(password);
-      const cryptedCpf = await this.hashPassword(body.cpf);
 
       return await this.dataBaseService.user.create({
         data: {
@@ -24,12 +24,12 @@ export class UserService {
           user_firstname: body.user_firstname,
           user_lastname: body.user_lastname,
           password: cryptedPassword,
-          cpf: cryptedCpf,
+          cpf: body.cpf,
           birth_date: body.birth_date,
         },
       });
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 

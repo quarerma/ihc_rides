@@ -6,8 +6,10 @@ minAgeDate.setFullYear(minAgeDate.getFullYear() - 12);
 
 export const signupSchema = z
   .object({
-    first_name: z.string().min(2, "First name must be at least 2 characters"),
-    last_name: z.string().min(2, "Last name must be at least 2 characters"),
+    user_firstname: z
+      .string()
+      .min(2, "First name must be at least 2 characters"),
+    user_lastname: z.string().min(2, "Last name must be at least 2 characters"),
     birth_date: z
       .string()
       .refine(

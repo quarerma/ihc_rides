@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuards } from './guards/jwt.guards';
@@ -30,5 +30,14 @@ export class AuthController {
   async auth(@Req() req: Request) {
     console.log(req.user);
     return { message: 'User is authenticated' };
+  }
+
+  @Get('/validate-cpf')
+  async validateCpf(@Query('cpf') cpf: string) {
+    try {
+      return await this.authService.validateCpf(cpf);
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import { get_no_auth, post_no_auth } from "@/boot/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [cpfValid, setCpfValid] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [cpfError, setCpfError] = useState<string | null>(null);
   const [step, setStep] = useState(1);
   const [birthDate, setBirthDate] = useState<string>("");
@@ -28,8 +29,8 @@ export default function SignUp() {
   });
 
   const allFieldsFilledStep1 =
-    watch("first_name") &&
-    watch("last_name") &&
+    watch("user_firstname") &&
+    watch("user_lastname") &&
     watch("birth_date") &&
     watch("cpf");
 
@@ -40,14 +41,18 @@ export default function SignUp() {
     setLoading(true);
     try {
       const cpf = watch("cpf");
-      const response = await axios.get(`/api/validate-cpf?cpf=${cpf}`);
+      const params = new URLSearchParams();
+      params.append("cpf", cpf.toString());
+      const response = await get_no_auth("/auth/validate-cpf", { params });
 
+      console.log(response);
       if (response.status === 200) {
         setCpfValid(true);
         setStep(2);
+        setCpfError(null);
       }
     } catch (error) {
-      if (error.response && error.response.status === 500) {
+      if (error.response && error.response.status === 409) {
         setCpfError("Invalid or already in use CPF");
         setCpfValid(false);
       } else {
@@ -61,14 +66,23 @@ export default function SignUp() {
   const handleSignUp = async (data: SignupData) => {
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      data.birth_date = convertToISO(data.birth_date);
+      await post_no_auth("/users", data);
       navigate("/login");
     } catch (error) {
-      console.error("Sign-up failed", error);
+      if (error.response && error.response.status === 409) {
+        setEmailError("Email already in use");
+      } else console.error("Sign-up failed", error);
     } finally {
       setLoading(false);
     }
   };
+
+  function convertToISO(dateStr: string) {
+    const [day, month, year] = dateStr.split("/").map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day)); // Month is 0-based
+    return date.toISOString();
+  }
 
   const formatCPF = (value: string) => {
     return value
@@ -129,21 +143,21 @@ export default function SignUp() {
               <div className="flex-1">
                 <Label htmlFor="first_name">First Name</Label>
                 <Input
-                  {...register("first_name")}
+                  {...register("user_firstname")}
                   placeholder="Enter your first name"
                 />
                 <p className="text-red-500 text-sm h-5">
-                  {errors.first_name?.message}
+                  {errors.user_firstname?.message}
                 </p>
               </div>
               <div className="flex-1">
                 <Label htmlFor="last_name">Last Name</Label>
                 <Input
-                  {...register("last_name")}
+                  {...register("user_lastname")}
                   placeholder="Enter your last name"
                 />
                 <p className="text-red-500 text-sm h-5">
-                  {errors.last_name?.message}
+                  {errors.user_lastname?.message}
                 </p>
               </div>
             </div>
@@ -184,7 +198,9 @@ export default function SignUp() {
           >
             <Label htmlFor="email">Email</Label>
             <Input {...register("email")} placeholder="Enter your email" />
-            <p className="text-red-500 text-sm h-5">{errors.email?.message}</p>
+            <p className="text-red-500 text-sm h-5">
+              {errors.email?.message || emailError}
+            </p>
             <Label htmlFor="password">Password</Label>
             <Input
               type="password"

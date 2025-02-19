@@ -24,20 +24,13 @@ export class RideService {
             },
           },
 
-          vehicle: {
-            connect: {
-              id: vehicle_id,
-            },
-          },
-          
           passenger: {
             connect: {
               id: passenger_id,
             },
-          }
-          
-        }
-      })
+          },
+        },
+      });
     } catch (error) {
       throw error;
     }
@@ -47,9 +40,9 @@ export class RideService {
     try {
       return await this.dataBaseService.ride.findMany({
         where: {
-          driver_id: user_id
-        }
-      })
+          driver_id: user_id,
+        },
+      });
     } catch (error) {
       throw error;
     }
@@ -59,9 +52,9 @@ export class RideService {
     try {
       return await this.dataBaseService.ride.findMany({
         where: {
-          passenger_id: user_id
-        }
-      })
+          passenger_id: user_id,
+        },
+      });
     } catch (error) {
       throw error;
     }
@@ -71,12 +64,12 @@ export class RideService {
     try {
       return await this.dataBaseService.ride.update({
         where: {
-          id: ride_id
+          id: ride_id,
         },
         data: {
-          ride_status: ride_status
-        }
-      })
+          ride_status: ride_status,
+        },
+      });
     } catch (error) {
       throw error;
     }
