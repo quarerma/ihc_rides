@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { post_no_auth } from "@/boot/axios";
 import { useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ export default function Login() {
     try {
       const response = await post_no_auth("/auth/login", data);
 
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data);
 
       navigate("/");
     } catch (error) {

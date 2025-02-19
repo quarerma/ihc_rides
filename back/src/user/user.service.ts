@@ -71,7 +71,7 @@ export class UserService {
 
   async getUserById(id: string) {
     try {
-      return await this.dataBaseService.user.findUnique({
+      const user = await this.dataBaseService.user.findUnique({
         where: {
           id,
         },
@@ -82,8 +82,14 @@ export class UserService {
           created_at: true,
         },
       });
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      return user;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 }

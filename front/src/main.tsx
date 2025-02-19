@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Navigate,
   RouterProvider,
@@ -9,19 +10,48 @@ import "./index.css";
 import Login from "./pages/no-auth/login";
 import SignUp from "./pages/no-auth/signup";
 import HomePage from "./pages/auth/home";
+import SecurePage from "./components/auth/SecurePage";
+import NoAuthPage from "./components/auth/NoAuthPage";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchInterval: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      staleTime: Infinity, //
+      retry: 5,
+      gcTime: 1000 * 60 * 5,
+    },
+  },
+});
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <NoAuthPage>
+        <Login />
+      </NoAuthPage>
+    ),
   },
   {
     path: "/signup",
-    element: <SignUp />,
+    element: (
+      <NoAuthPage>
+        <SignUp />
+      </NoAuthPage>
+    ),
   },
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <QueryClientProvider client={queryClient}>
+        <SecurePage>
+          <HomePage />
+        </SecurePage>
+      </QueryClientProvider>
+    ),
   },
   {
     path: "*",

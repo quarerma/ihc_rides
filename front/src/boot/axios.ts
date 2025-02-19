@@ -39,3 +39,16 @@ export async function post(endpoint: string, data = {}, options = {}) {
     },
   });
 }
+
+export async function getSession() {
+  try {
+    return (await get("/users")).data;
+  } catch (error) {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+
+    console.error(error);
+
+    return null;
+  }
+}
