@@ -80,6 +80,8 @@ export class UserService {
           user_firstname: true,
           user_lastname: true,
           created_at: true,
+          birth_date: true,
+          role: true,
         },
       });
 

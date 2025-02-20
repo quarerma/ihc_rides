@@ -12,6 +12,7 @@ import SignUp from "./pages/no-auth/signup";
 import HomePage from "./pages/auth/home";
 import SecurePage from "./components/auth/SecurePage";
 import NoAuthPage from "./components/auth/NoAuthPage";
+import PageLayout from "./components/ui/layout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,7 +49,9 @@ const router = createBrowserRouter([
     element: (
       <QueryClientProvider client={queryClient}>
         <SecurePage>
-          <HomePage />
+          <PageLayout>
+            <HomePage />
+          </PageLayout>
         </SecurePage>
       </QueryClientProvider>
     ),
@@ -59,7 +62,7 @@ const router = createBrowserRouter([
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <>
+  <div className="bg-[#f1f5f9] text-[#595959] font-roboto font-medium">
     <RouterProvider router={router} />
-  </>
+  </div>
 );

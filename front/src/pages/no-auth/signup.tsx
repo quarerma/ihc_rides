@@ -133,13 +133,13 @@ export default function SignUp() {
   };
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <div className="p-5 border-muted min-w-[500px] border-2 rounded-md flex flex-col space-y-5 items-center">
+    <div className="w-screen min-h-screen flex justify-center items-center">
+      <div className="p-5 border-border md:min-w-[500px] max-md:w-full max-md:mx-5 my-10 border-2 bg-white rounded-md flex flex-col space-y-5 items-center">
         <h1 className="text-3xl font-bold text-center">Sign Up to rebU</h1>
         <img src="/logo.png" alt="logo" className="w-16 h-16" />
         {step === 1 ? (
           <div className="w-full flex flex-col space-y-3">
-            <div className="w-full flex space-x-2">
+            <div className="w-full md:flex space-x-2">
               <div className="flex-1">
                 <Label htmlFor="first_name">First Name</Label>
                 <Input
