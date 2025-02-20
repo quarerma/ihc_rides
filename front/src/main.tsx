@@ -13,6 +13,7 @@ import HomePage from "./pages/auth/home";
 import SecurePage from "./components/auth/SecurePage";
 import NoAuthPage from "./components/auth/NoAuthPage";
 import PageLayout from "./components/ui/layout";
+import AccountSettings from "./pages/auth/account/account-settings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,6 +52,18 @@ const router = createBrowserRouter([
         <SecurePage>
           <PageLayout>
             <HomePage />
+          </PageLayout>
+        </SecurePage>
+      </QueryClientProvider>
+    ),
+  },
+  {
+    path: "/account",
+    element: (
+      <QueryClientProvider client={queryClient}>
+        <SecurePage>
+          <PageLayout>
+            <AccountSettings />
           </PageLayout>
         </SecurePage>
       </QueryClientProvider>

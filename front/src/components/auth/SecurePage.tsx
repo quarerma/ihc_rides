@@ -1,18 +1,13 @@
-import { getSession } from "@/boot/axios";
-import { useQuery } from "@tanstack/react-query";
 import { ReactNode, useState, useEffect } from "react";
+import { useUserSession } from "@/hooks/session"; // Adjust path if needed
 
 interface SecurePageProps {
   children: ReactNode;
 }
 
 export default function SecurePage({ children }: SecurePageProps) {
+  const { user, isLoading } = useUserSession();
   const [checked, setChecked] = useState(false);
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => await getSession(),
-  });
 
   useEffect(() => {
     if (!isLoading) {
@@ -21,6 +16,8 @@ export default function SecurePage({ children }: SecurePageProps) {
   }, [isLoading]);
 
   if (!checked) return null; // Ensures a blank screen until check completes
+
+  if (!user) return <p>Unauthorized: Please log in.</p>; // Redirect or handle unauthorized access
 
   return <>{children}</>;
 }
