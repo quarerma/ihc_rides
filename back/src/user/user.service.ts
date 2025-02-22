@@ -41,6 +41,50 @@ export class UserService {
     return hash;
   }
 
+  async getCPF(user_id: string) {
+    try {
+      const user = await this.dataBaseService.user.findUnique({
+        where: {
+          id: user_id,
+        },
+        select: {
+          cpf: true,
+        },
+      });
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async validatePassword(password: string, user_id: string) {
+    try {
+      const user = await this.dataBaseService.user.findUnique({
+        where: {
+          id: user_id,
+        },
+        select: {
+          password: true,
+        },
+      });
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      const isValid = await bcrypt.compare(password, user.password);
+
+      return isValid;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async checkEmail(email: string): Promise<boolean> {
     const user = await this.dataBaseService.user.findUnique({
       where: {

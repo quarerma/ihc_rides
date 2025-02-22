@@ -11,39 +11,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUserSession } from "@/hooks/session";
 
-const menuItems = [
-  {
-    name: "Security",
-    description: "Manage your security settings",
-    icon: <Lock />,
-    path: "/security",
-  },
-  {
-    name: "Vehicles",
-    description: "View and manage your vehicles",
-    icon: <Car />,
-    path: "/vehicles",
-  },
-  {
-    name: "Address",
-    description: "Update your address information",
-    icon: <MapPin />,
-    path: "/address",
-  },
-  {
-    name: "Payments",
-    description: "Manage your payment methods",
-    icon: <CreditCard />,
-    path: "/payments",
-  },
-  {
-    name: "Documents",
-    description: "Access your important documents",
-    icon: <FileText />,
-    path: "/documents",
-  },
-];
-
 export default function NavigationMenu() {
   const { user } = useUserSession();
 
@@ -52,13 +19,49 @@ export default function NavigationMenu() {
     // Add logout functionality here
   };
 
+  const menuItems = [
+    {
+      name: "Security",
+      description: "Manage your security settings",
+      icon: <Lock />,
+      path: "/security",
+    },
+    ...(user?.role === "DRIVER"
+      ? [
+          {
+            name: "Vehicles",
+            description: "View and manage your vehicles",
+            icon: <Car />,
+            path: "/vehicles",
+          },
+        ]
+      : []),
+    {
+      name: "Address",
+      description: "Update your address information",
+      icon: <MapPin />,
+      path: "/address",
+    },
+    {
+      name: "Payments",
+      description: "Manage your payment methods",
+      icon: <CreditCard />,
+      path: "/payments",
+    },
+    {
+      name: "Documents",
+      description: "Access your important documents",
+      icon: <FileText />,
+      path: "/documents",
+    },
+  ];
+
   return (
-    <div className="flex flex-col gap-4  bg-[#f1f5f9]">
+    <div className="flex flex-col gap-4 bg-[#f1f5f9]">
       <div className="flex items-center space-x-2 sticky top-0 bg-[#f1f5f9] z-10 py-5">
         <Avatar>
           <AvatarImage
-            src="https://www.gravatar.com/avatar/?d=mp
-"
+            src="https://www.gravatar.com/avatar/?d=mp"
             alt="avatar"
           />
           <AvatarFallback>CN</AvatarFallback>
@@ -92,7 +95,7 @@ export default function NavigationMenu() {
         <div className="flex items-center gap-3">
           <LogOut />
           <div className="flex flex-col items-start">
-            <span className="text-lg font-medium text-start ">Logout</span>
+            <span className="text-lg font-medium text-start">Logout</span>
             <p className="text-sm text-gray-500">Sign out of your account</p>
           </div>
         </div>

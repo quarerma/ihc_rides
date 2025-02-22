@@ -39,4 +39,36 @@ export class UserController {
       throw new Error(error);
     }
   }
+
+  @Post('register-cnh')
+  @UseGuards(JwtAuthGuards)
+  async registerCNH(@Body() body: any, @Req() req: any) {
+    try {
+      return this.usersService.setUserAsDriver(req.user.id, body);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  @Get('cpf')
+  @UseGuards(JwtAuthGuards)
+  async getCPF(@Req() req: Request) {
+    try {
+      const user = req.user as UserRequest;
+      return await this.usersService.getCPF(user.id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  @Post('check-password')
+  @UseGuards(JwtAuthGuards)
+  async checkPassword(@Body() data: { password: string }, @Req() req: Request) {
+    try {
+      const user = req.user as UserRequest;
+      return await this.usersService.validatePassword(data.password, user.id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
