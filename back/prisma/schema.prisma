@@ -100,7 +100,7 @@ model Driver {
 model CNH {
   serial          String        @unique
   driver          Driver?
-  category        cnhCategory[]
+  category        String[]
   expiration_date DateTime
   emission_date   DateTime
   issued_by       String
@@ -108,7 +108,7 @@ model CNH {
 
 model Vehicle {
   id               String      @id @default(uuid())
-  category         cnhCategory
+  type             VehicleType
   brand            String
   model            String
   fabrication_year Int
@@ -118,9 +118,9 @@ model Vehicle {
   driver_id        String
 
   Crlv Crlv?
+  Ride Ride[]
 
   @@index([driver_id])
-  Ride Ride[]
 }
 
 model Crlv {
@@ -132,15 +132,14 @@ model Crlv {
   issued_by       String
 }
 
-enum cnhCategory {
-  A
-  B
-  C
-  D
-  E
-}
-
 enum Role {
   PASSENGER
   DRIVER
 }
+
+enum VehicleType {
+  CAR
+  MOTORCYCLE
+  VAN
+}
+

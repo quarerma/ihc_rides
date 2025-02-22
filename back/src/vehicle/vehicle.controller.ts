@@ -10,9 +10,7 @@ export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 
   @Post()
-
-  async createVehicle(@Body() body : CreateVehicleDTO,@Req() request:  Request) {
-
+  async createVehicle(@Body() body: CreateVehicleDTO, @Req() request: Request) {
     try {
       return this.vehicleService.create(body, (request.user as UserRequest).id);
     } catch (error) {
