@@ -1,8 +1,6 @@
-import { cnhCategory } from "@prisma/client";
-
 export class createCnhDTO {
   serial: string;
-  category: cnhCategory[];
+  category: string[];
   expiration_date: Date;
   emission_date: Date;
   issued_by: string;

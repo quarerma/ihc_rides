@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CreateUserDTO } from './dto/create.user.dto';
 import * as bcrypt from 'bcrypt';
+import { createCnhDTO } from './dto/create.cnh.dto';
 
 @Injectable()
 export class UserService {
@@ -90,6 +91,36 @@ export class UserService {
       }
 
       return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async setUserAsDriver(user_id: string, cnh_data: createCnhDTO) {
+    try {
+      return await this.dataBaseService.user.update({
+        where: {
+          id: user_id,
+        },
+        data: {
+          role: 'DRIVER',
+          driver: {
+            create: {
+              cnh: {
+                create: {
+                  serial: cnh_data.serial,
+                  category: {
+                    set: cnh_data.category,
+                  },
+                  expiration_date: cnh_data.expiration_date,
+                  emission_date: cnh_data.emission_date,
+                  issued_by: cnh_data.issued_by,
+                },
+              },
+            },
+          },
+        },
+      });
     } catch (error) {
       throw error;
     }

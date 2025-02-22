@@ -25,7 +25,6 @@ model User {
   received_rates Rates[]     @relation("TargetUser")
   given_rates    Rates[]     @relation("SourceUser")
   Residence      Residence[]
-  Ride           Ride[]
 
   @@index([email])
 }
@@ -62,8 +61,6 @@ model Ride {
   id              String     @id @default(uuid())
   driver          Driver     @relation(fields: [driver_id], references: [user_id])
   driver_id       String
-  passenger       User       @relation(fields: [passenger_id], references: [id])
-  passenger_id    String
   vehicle         Vehicle    @relation(fields: [vehicle_id], references: [id])
   vehicle_id      String
   origin          String
@@ -71,10 +68,8 @@ model Ride {
   ride_date       DateTime
   number_of_seats Int
   ride_price      Decimal
-  ride_status     RideStatus
 
   @@index([driver_id])
-  @@index([passenger_id])
   @@index([vehicle_id])
   @@index([ride_date])
 }
