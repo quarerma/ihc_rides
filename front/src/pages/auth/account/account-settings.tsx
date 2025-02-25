@@ -24,7 +24,7 @@ export default function NavigationMenu() {
       name: "Security",
       description: "Manage your security settings",
       icon: <Lock />,
-      path: "/security",
+      path: "security",
     },
     ...(user?.role === "DRIVER"
       ? [
@@ -32,7 +32,7 @@ export default function NavigationMenu() {
             name: "Vehicles",
             description: "View and manage your vehicles",
             icon: <Car />,
-            path: "/vehicles",
+            path: "vehicles",
           },
         ]
       : []),
@@ -40,19 +40,19 @@ export default function NavigationMenu() {
       name: "Address",
       description: "Update your address information",
       icon: <MapPin />,
-      path: "/address",
+      path: "address",
     },
     {
       name: "Payments",
       description: "Manage your payment methods",
       icon: <CreditCard />,
-      path: "/payments",
+      path: "payments",
     },
     {
       name: "Documents",
       description: "Access your important documents",
       icon: <FileText />,
-      path: "/documents",
+      path: "documents",
     },
   ];
 

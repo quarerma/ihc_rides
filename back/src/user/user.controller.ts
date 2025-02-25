@@ -61,6 +61,17 @@ export class UserController {
     }
   }
 
+  @Get('cnh')
+  @UseGuards(JwtAuthGuards)
+  async getCNH(@Req() req: Request) {
+    try {
+      const user = req.user as UserRequest;
+      return await this.usersService.getCNH(user.id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   @Post('check-password')
   @UseGuards(JwtAuthGuards)
   async checkPassword(@Body() data: { password: string }, @Req() req: Request) {

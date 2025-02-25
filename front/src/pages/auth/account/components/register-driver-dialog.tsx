@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 import { post } from "@/boot/axios";
+import { useUserSession } from "@/hooks/session";
 
 export default function BecomeDriverDialog({
   open,
@@ -40,6 +41,8 @@ export default function BecomeDriverDialog({
   const [expirationDate, setExpirationDate] = useState<string>("");
   const [emissionDate, setEmissionDate] = useState<string>("");
   const [loading, setLoading] = useState(false);
+
+  const { refetchUser } = useUserSession();
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) => {
@@ -89,6 +92,7 @@ export default function BecomeDriverDialog({
       const response = await post("users/register-cnh", data);
       console.log("Response:", response);
 
+      await refetchUser();
       toast("Driver registration submitted successfully");
       setOpen(false);
     } catch (error) {

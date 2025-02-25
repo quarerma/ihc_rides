@@ -72,7 +72,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/documents",
+    path: "/account/documents",
     element: (
       <QueryClientProvider client={queryClient}>
         <SecurePage>

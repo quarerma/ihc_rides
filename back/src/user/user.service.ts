@@ -169,4 +169,29 @@ export class UserService {
       throw error;
     }
   }
+
+  async getCNH(user_id: string) {
+    try {
+      const user = await this.dataBaseService.user.findUnique({
+        where: {
+          id: user_id,
+        },
+        select: {
+          driver: {
+            select: {
+              cnh: true,
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      return user.driver.cnh;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

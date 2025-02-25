@@ -12,13 +12,19 @@ import { useUserSession } from "@/hooks/session";
 const navLinks = [
   { to: "/", label: "Home", icon: Home },
   { to: "/rides", label: "Rides", icon: Car },
-  { to: "/activities", label: "Activities", icon: Calendar },
+  { to: "activities", label: "Activities", icon: Calendar },
+  { to: "/account", label: "Account", icon: User },
 ];
 
 export default function PageLayout({ children }: React.PropsWithChildren) {
   const { user } = useUserSession();
   const queryClient = useQueryClient();
   const location = useLocation();
+
+  const isActive = (path: string) =>
+    path === "/"
+      ? location.pathname === path
+      : location.pathname.startsWith(path);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -31,7 +37,7 @@ export default function PageLayout({ children }: React.PropsWithChildren) {
                 key={to}
                 to={to}
                 className={`flex items-center hover:text-primary ${
-                  location.pathname === to ? "text-primary font-semibold" : ""
+                  isActive(to) ? "text-primary font-semibold" : ""
                 }`}
               >
                 <Icon size={24} className="mr-2" />
@@ -47,9 +53,7 @@ export default function PageLayout({ children }: React.PropsWithChildren) {
                 <Link
                   to="/account"
                   className={`px-4 py-2 flex items-center hover:bg-gray-100 ${
-                    location.pathname === "/account"
-                      ? "text-primary font-semibold"
-                      : ""
+                    isActive("/account") ? "text-primary font-semibold" : ""
                   }`}
                 >
                   <User size={20} className="mr-2" />
@@ -80,24 +84,13 @@ export default function PageLayout({ children }: React.PropsWithChildren) {
               key={to}
               to={to}
               className={`flex flex-col items-center hover:text-primary ${
-                location.pathname === to ? "text-primary font-semibold" : ""
+                isActive(to) ? "text-primary font-semibold" : ""
               }`}
             >
               <Icon size={24} />
               <span className="text-xs">{label}</span>
             </Link>
           ))}
-          <Link
-            to="/account"
-            className={`flex flex-col items-center hover:text-primary ${
-              location.pathname === "/account"
-                ? "text-primary font-extrabold"
-                : ""
-            }`}
-          >
-            <User size={24} />
-            <span className="text-xs">Account</span>
-          </Link>
         </div>
       </nav>
     </div>
