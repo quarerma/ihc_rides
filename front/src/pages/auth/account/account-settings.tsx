@@ -10,12 +10,15 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUserSession } from "@/hooks/session";
+import { logout } from "@/utils/logout";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function NavigationMenu() {
   const { user } = useUserSession();
-
+  const queryClient = useQueryClient();
   const handleLogout = () => {
     console.log("Logging out...");
+    logout(queryClient);
     // Add logout functionality here
   };
 

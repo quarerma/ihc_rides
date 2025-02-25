@@ -15,9 +15,9 @@ export default function SecurePage({ children }: SecurePageProps) {
     }
   }, [isLoading]);
 
-  if (!checked) return null; // Ensures a blank screen until check completes
+  if (!checked) return null;
 
-  if (!user) return <p>Unauthorized: Please log in.</p>; // Redirect or handle unauthorized access
+  if (!user) return <p>Unauthorized: Please log in.</p>;
 
   return <>{children}</>;
 }

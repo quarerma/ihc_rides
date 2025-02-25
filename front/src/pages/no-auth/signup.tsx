@@ -139,7 +139,7 @@ export default function SignUp() {
         <img src="/logo.png" alt="logo" className="w-16 h-16" />
         {step === 1 ? (
           <div className="w-full flex flex-col space-y-3">
-            <div className="w-full md:flex space-x-2">
+            <div className="w-full md:flex ">
               <div className="flex-1">
                 <Label htmlFor="first_name">First Name</Label>
                 <Input
