@@ -15,6 +15,7 @@ import NoAuthPage from "./components/auth/NoAuthPage";
 import PageLayout from "./components/ui/layout";
 import AccountSettings from "./pages/auth/account/account-settings";
 import Documents from "./pages/auth/account/documents";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -90,5 +91,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <div className="bg-[#f1f5f9] text-[#595959] font-roboto font-medium">
     <RouterProvider router={router} />
+    <Toaster />
   </div>
 );

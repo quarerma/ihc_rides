@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
+import { post } from "@/boot/axios";
 
 export default function BecomeDriverDialog({
   open,
@@ -38,6 +39,7 @@ export default function BecomeDriverDialog({
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [expirationDate, setExpirationDate] = useState<string>("");
   const [emissionDate, setEmissionDate] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) => {
@@ -77,12 +79,23 @@ export default function BecomeDriverDialog({
     }
   };
 
-  const onSubmit = (data: Cnh) => {
-    data.expiration_date = convertToISO(expirationDate);
-    data.emission_date = convertToISO(emissionDate);
-    console.log("CNH Data:", data);
-    toast("Driver registration submitted successfully");
-    setOpen(false);
+  const onSubmit = async (data: Cnh) => {
+    setLoading(true);
+    try {
+      data.expiration_date = convertToISO(expirationDate);
+      data.emission_date = convertToISO(emissionDate);
+      console.log("CNH Data:", data);
+
+      const response = await post("users/register-cnh", data);
+      console.log("Response:", response);
+
+      toast("Driver registration submitted successfully");
+      setOpen(false);
+    } catch (error) {
+      toast("Failed to submit driver registration", { type: "error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -128,7 +141,19 @@ export default function BecomeDriverDialog({
               <p className="text-red-500">{errors.category.message}</p>
             )}
           </div>
-
+          <div>
+            <Label>Emission Date</Label>
+            <Input
+              type="text"
+              placeholder="DD/MM/YYYY"
+              value={emissionDate}
+              maxLength={10}
+              onChange={(e) => handleDateChange(e, "emission")}
+            />
+            {errors.emission_date && (
+              <p className="text-red-500">{errors.emission_date.message}</p>
+            )}
+          </div>
           <div>
             <Label>Expiration Date</Label>
             <Input
@@ -144,20 +169,6 @@ export default function BecomeDriverDialog({
           </div>
 
           <div>
-            <Label>Emission Date</Label>
-            <Input
-              type="text"
-              placeholder="DD/MM/YYYY"
-              value={emissionDate}
-              maxLength={10}
-              onChange={(e) => handleDateChange(e, "emission")}
-            />
-            {errors.emission_date && (
-              <p className="text-red-500">{errors.emission_date.message}</p>
-            )}
-          </div>
-
-          <div>
             <Label>Issued By</Label>
             <Input {...register("issued_by")} />
             {errors.issued_by && (
@@ -165,7 +176,9 @@ export default function BecomeDriverDialog({
             )}
           </div>
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
