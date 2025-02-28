@@ -42,7 +42,7 @@ export default function Login() {
 
   return (
     <div className="w-screen min-h-screen flex justify-center items-center">
-      <div className="p-5 border-border md:min-w-[450px] max-md:w-full max-md:mx-5 my-10 bg-white  border-2 rounded-md flex flex-col space-y-5 items-center">
+      <div className="p-5 border-border md:min-w-[450px] max-md:w-full max-md:mx-1 my-10 bg-white  border-2 rounded-md flex flex-col space-y-5 items-center">
         <h1 className="text-3xl font-bold text-center">Welcome to rebU</h1>
         <img src="/logo.png" alt="logo" className="w-16 h-16" />
         <form

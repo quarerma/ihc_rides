@@ -16,6 +16,7 @@ import PageLayout from "./components/ui/layout";
 import AccountSettings from "./pages/auth/account/account-settings";
 import Documents from "./pages/auth/account/documents";
 import { Toaster } from "sonner";
+import Vehicles from "./pages/auth/account/vehicles";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -78,6 +79,18 @@ const router = createBrowserRouter([
         <SecurePage>
           <PageLayout>
             <Documents />
+          </PageLayout>
+        </SecurePage>
+      </QueryClientProvider>
+    ),
+  },
+  {
+    path: "/account/vehicles",
+    element: (
+      <QueryClientProvider client={queryClient}>
+        <SecurePage>
+          <PageLayout>
+            <Vehicles />
           </PageLayout>
         </SecurePage>
       </QueryClientProvider>

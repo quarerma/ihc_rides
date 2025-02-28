@@ -12,16 +12,18 @@ export class VehicleService {
       // Fetch driver CNH categories
       const driver = await this.dataBaseService.driver.findUnique({
         where: { user_id },
-        select: { cnh: true }, // Assuming 'cnh' is an array of categories
+        include: { cnh: true }, // Assuming 'cnh' is an array of categories
       });
 
-      if (!driver || !Array.isArray(driver.cnh) || driver.cnh.length === 0) {
+      console.log('Driver:', driver);
+      if (!driver || !Array.isArray(driver.cnh.category) || driver.cnh.category.length === 0) {
         throw new Error('Driver not found or CNH categories are missing.');
       }
 
       // Convert CNH categories to uppercase for consistency
-      const cnhCategories = driver.cnh.map((category) => category.toUpperCase());
+      const cnhCategories = driver.cnh.category.map((category) => category.toUpperCase());
 
+      console.log('Driver CNH categories:', cnhCategories);
       // CNH category permissions mapped to vehicle types
       const cnhPermissions: Record<string, VehicleType[]> = {
         A: [VehicleType.MOTORCYCLE],
