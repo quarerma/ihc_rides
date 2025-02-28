@@ -1,20 +1,27 @@
 import { get } from "@/boot/axios";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Vehicle } from "@/types/vehicle";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Car, Plus, Bike } from "lucide-react";
 import { Link } from "react-router-dom";
 import Lottie from "lottie-react";
 import loadingAnimation from "@/assets/loading_blue_car.json";
 import { useState } from "react";
 import CreateVehicleDialog from "./components/create-vehicle";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { formatDate } from "@/utils/formatter";
 
 export default function Vehicles() {
-  const { data: vehicles, isLoading } = useQuery({
+  const {
+    data: vehicles,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["vehicles"],
     queryFn: async () => {
       const response = await get("/vehicle/driver");
+      console.log(response.data);
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return response.data as Vehicle[];
     },
@@ -49,9 +56,9 @@ export default function Vehicles() {
           <p className="text-gray-500">You have no vehicles registered.</p>
           <Button
             onClick={() => setOpen(true)}
-            className="bg-blue-500 text-white"
+            className="bg-card text-black w-full border border-border shadow-lg"
           >
-            Register Vehicle
+            <Plus /> Register Vehicle
           </Button>
         </div>
       ) : (
@@ -59,38 +66,67 @@ export default function Vehicles() {
           <div className="space-y-4">
             {vehicles?.map((vehicle) => (
               <Card key={vehicle.id}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-lg font-bold">
+                <CardHeader className="flex text-lg  font-semibold">
+                  <div className="flex items-center">
+                    {(() => {
+                      switch (vehicle.type) {
+                        case "MOTORCYCLE":
+                          return (
+                            <Bike className="w-5 h-5 mr-2 text-gray-600" />
+                          );
+                        case "CAR":
+                          return <Car className="w-5 h-5 mr-2 text-gray-600" />;
+                        default:
+                          return <Car className="w-5 h-5 mr-2 text-gray-600" />;
+                      }
+                    })()}
+                    <h1>
                       {vehicle.brand} {vehicle.model}
-                    </h2>
-                    <p className="text-sm text-gray-500">{vehicle.plate}</p>
+                    </h1>
                   </div>
-                  <Link
-                    to={`/account/vehicles/${vehicle.id}`}
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    See more
-                  </Link>
-                </div>
+                </CardHeader>
+                <CardContent className="text-gray-700 text-base space-y-2">
+                  <div className="flex space-x-5 justify-between  items-center h-5">
+                    <Label>Cor: </Label>
+                    <Label>{vehicle.color}</Label>
+                  </div>
+                  <div className="flex justify-between items-center h-5">
+                    <Label>Placa: </Label>
+                    <Label>{vehicle.plate}</Label>
+                  </div>
+                  <div className="flex justify-between items-center h-5">
+                    <Label>Ano de Fabricação: </Label>
+                    <Label>{vehicle.fabrication_year}</Label>
+                  </div>
+                  <div className="flex justify-between items-center h-5">
+                    <Label>Data Emissão Crlv: </Label>
+                    <Label>{formatDate(vehicle.Crlv.emission_date)}</Label>
+                  </div>
+                  <div className="flex justify-between items-center h-5">
+                    <Label>Data Expiração Crlv: </Label>
+                    <Label>{formatDate(vehicle.Crlv.expiration_date)}</Label>
+                  </div>
+                  <div className="flex justify-between items-center h-5">
+                    <Label>Instituição emitora: </Label>
+                    <Label>{vehicle.Crlv.issued_by}</Label>
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </div>
 
           {/* Register New Vehicle Button */}
-          <Card className="p-4 flex justify-center">
-            <Button
-              onClick={() => setOpen(true)}
-              className="bg-blue-500 text-white"
-            >
-              Register New Vehicle
-            </Button>
-          </Card>
+          <Button
+            onClick={() => setOpen(true)}
+            className="bg-card text-black w-full border border-border shadow-lg"
+          >
+            <Plus /> Register New Vehicle
+          </Button>
         </>
       )}
 
       {/* Create Vehicle Dialog */}
-      <CreateVehicleDialog open={open} setOpen={setOpen} />
+      <CreateVehicleDialog open={open} setOpen={setOpen} refetch={refetch} />
     </div>
   );
 }

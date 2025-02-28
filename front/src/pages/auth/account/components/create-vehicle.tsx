@@ -20,13 +20,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { Vehicle } from "@/types/vehicle";
+import { QueryObserverResult } from "@tanstack/react-query";
 
 export default function CreateVehicleDialog({
   open,
   setOpen,
+  refetch,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
+  refetch: () => Promise<QueryObserverResult<Vehicle[], Error>>;
 }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -37,6 +42,8 @@ export default function CreateVehicleDialog({
     register,
     handleSubmit,
     setValue,
+    trigger,
+    watch,
     formState: { errors },
   } = useForm<CreateVehicle>({
     resolver: zodResolver(VehicleSchema),
@@ -67,14 +74,27 @@ export default function CreateVehicleDialog({
     }
   };
 
+  const handleNextStep = async () => {
+    const isValid = await trigger([
+      "type",
+      "brand",
+      "model",
+      "fabrication_year",
+      "color",
+      "plate",
+    ]);
+    console.log("isValid:", isValid);
+    if (isValid) setStep(2);
+  };
+
   const onSubmit = async (data: CreateVehicle) => {
     setLoading(true);
     try {
       data.crlv.expiration_date = convertToISO(expirationDate);
       data.crlv.emission_date = convertToISO(emissionDate);
       console.log("Vehicle Data:", data);
-      const response = await post("/vehicle", data);
-      console.log("Response:", response);
+      await post("/vehicle", data);
+      await refetch();
       toast("Vehicle created successfully");
       setOpen(false);
     } catch (error) {
@@ -86,19 +106,20 @@ export default function CreateVehicleDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="w-[90%]">
+      <DialogContent className="max-w-[90%] max-h-[90vh] overflow-y-auto ">
         <DialogHeader>
           <DialogTitle>
             {step === 1 ? "Vehicle Details" : "CRLV Details"}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)}>
           {step === 1 && (
             <>
               <div>
                 <Label>Type</Label>
                 <Select
                   onValueChange={(value) => setValue("type", value as any)}
+                  value={watch("type")}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select vehicle type" />
@@ -109,25 +130,25 @@ export default function CreateVehicleDialog({
                     <SelectItem value="VAN">Van</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.type && (
-                  <p className="text-red-500">{errors.type.message}</p>
-                )}
+                <p className="text-red-500 text-sm h-5">
+                  {errors.type?.message}
+                </p>
               </div>
 
               <div>
                 <Label>Brand</Label>
                 <Input {...register("brand")} placeholder="Vehicle brand..." />
-                {errors.brand && (
-                  <p className="text-red-500">{errors.brand.message}</p>
-                )}
+                <p className="text-red-500 text-sm  h-5">
+                  {errors.brand?.message}
+                </p>
               </div>
 
               <div>
                 <Label>Model</Label>
                 <Input {...register("model")} placeholder="Vehicle model..." />
-                {errors.model && (
-                  <p className="text-red-500">{errors.model.message}</p>
-                )}
+                <p className="text-red-500 text-sm  h-5">
+                  {errors.model?.message}
+                </p>
               </div>
 
               <div>
@@ -149,53 +170,37 @@ export default function CreateVehicleDialog({
                       .slice(0, 4);
                   }}
                 />
-                {errors.fabrication_year && (
-                  <p className="text-red-500">
-                    {errors.fabrication_year.message}
-                  </p>
-                )}
+                <p className="text-red-500 text-sm  h-5">
+                  {errors.fabrication_year?.message}
+                </p>
               </div>
 
               <div>
                 <Label>Color</Label>
                 <Input {...register("color")} placeholder="Vehicle color..." />
-                {errors.color && (
-                  <p className="text-red-500">{errors.color.message}</p>
-                )}
+                <p className="text-red-500 text-sm  h-5">
+                  {errors.color?.message}
+                </p>
               </div>
 
               <div>
                 <Label>Plate</Label>
-                <Input {...register("plate")} placeholder="License plate..." />
-                {errors.plate && (
-                  <p className="text-red-500">{errors.plate.message}</p>
-                )}
+                <Input {...register("plate")} placeholder="AAA1A11" />
+                <p className="text-red-500 text-sm  h-5">
+                  {errors.plate?.message}
+                </p>
               </div>
 
-              <Button type="button" onClick={() => setStep(2)}>
-                Next
-              </Button>
+              <div className="flex justify-end">
+                <Button type="button" onClick={handleNextStep}>
+                  Next <ArrowRight className="ml-2" />
+                </Button>
+              </div>
             </>
           )}
 
           {step === 2 && (
             <>
-              <div>
-                <Label>CRLV - Expiration Date</Label>
-                <Input
-                  type="text"
-                  placeholder="DD/MM/YYYY"
-                  value={expirationDate}
-                  maxLength={10}
-                  onChange={(e) => handleDateChange(e, "expiration")}
-                />
-                {errors.crlv?.expiration_date && (
-                  <p className="text-red-500">
-                    {errors.crlv.expiration_date.message}
-                  </p>
-                )}
-              </div>
-
               <div>
                 <Label>CRLV - Emission Date</Label>
                 <Input
@@ -205,11 +210,23 @@ export default function CreateVehicleDialog({
                   maxLength={10}
                   onChange={(e) => handleDateChange(e, "emission")}
                 />
-                {errors.crlv?.emission_date && (
-                  <p className="text-red-500">
-                    {errors.crlv.emission_date.message}
-                  </p>
-                )}
+                <p className="text-red-500 text-sm  h-5">
+                  {errors.crlv?.emission_date?.message}
+                </p>
+              </div>
+
+              <div>
+                <Label>CRLV - Expiration Date</Label>
+                <Input
+                  type="text"
+                  placeholder="DD/MM/YYYY"
+                  value={expirationDate}
+                  maxLength={10}
+                  onChange={(e) => handleDateChange(e, "expiration")}
+                />
+                <p className="text-red-500 text-sm  h-5">
+                  {errors.crlv?.expiration_date?.message}
+                </p>
               </div>
 
               <div>
@@ -218,19 +235,18 @@ export default function CreateVehicleDialog({
                   {...register("crlv.issued_by")}
                   placeholder="Issuing authority..."
                 />
-                {errors.crlv?.issued_by && (
-                  <p className="text-red-500">
-                    {errors.crlv.issued_by.message}
-                  </p>
-                )}
+                <p className="text-red-500 text-sm  h-5">
+                  {errors.crlv?.issued_by?.message}
+                </p>
               </div>
 
               <div className="flex justify-between">
                 <Button type="button" onClick={() => setStep(1)}>
-                  Back
+                  <ArrowLeft className="mr-2" /> Back
                 </Button>
                 <Button type="submit" disabled={loading}>
-                  {loading ? "Submitting..." : "Submit"}
+                  {loading ? "Submitting..." : "Submit"}{" "}
+                  <Check className="ml-2" />
                 </Button>
               </div>
             </>

@@ -16,7 +16,7 @@ export class VehicleController {
     try {
       return this.vehicleService.create(body, (request.user as UserRequest).id);
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 

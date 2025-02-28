@@ -12,7 +12,9 @@ export const VehicleSchema = z.object({
   model: z.string().min(1, "Model is required"),
   fabrication_year: z.coerce.number().int().min(1886, "Invalid year"),
   color: z.string().min(1, "Color is required"),
-  plate: z.string().min(1, "Plate is required"),
+  plate: z
+    .string()
+    .regex(/^[A-Z]{3}\d[A-Z]\d{2}$/, "Invalid plate format (AAA1A11)"),
   crlv: CrlvSchema,
 });
 

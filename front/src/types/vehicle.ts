@@ -7,7 +7,7 @@ export type Vehicle = {
   color: string;
   plate: string;
   driver_id: string;
-  crlv: Crlv;
+  Crlv: Crlv;
 };
 
 export type Crlv = {

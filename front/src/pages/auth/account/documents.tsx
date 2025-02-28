@@ -8,9 +8,9 @@ import { Cnh } from "@/schema/cnh.schema";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { ArrowLeft, IdCard, Car, Eye, EyeOff } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+
 import { Label } from "@/components/ui/label";
+import { formatDate } from "@/utils/formatter";
 
 export default function Documents() {
   const { user } = useUserSession();
@@ -34,11 +34,6 @@ export default function Documents() {
     },
     enabled: user?.role === "DRIVER",
   });
-
-  const formatDate = (date: Date) =>
-    date
-      ? format(new Date(date), "d 'de' MMMM 'de' yyyy", { locale: ptBR })
-      : "-";
 
   const maskString = (str: string) => str?.replace(/.(?=.{3})/g, "*");
 
