@@ -1,26 +1,48 @@
-import { Controller, Get, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { RideService } from './ride.service';
 import { CreateRideDto } from './dto/create.ride.dto';
 import { UserRequest } from 'src/types/user.request';
+import { JwtAuthGuards } from 'src/auth/guards/jwt.guards';
+import { VehicleType } from '@prisma/client';
 
 @Controller('ride')
 export class RideController {
   constructor(private readonly rideService: RideService) {}
 
   @Post()
-  async createRide(createRideDto: CreateRideDto, @Query('driver_id') driver_id: string) {
+  @UseGuards(JwtAuthGuards)
+  async createRide(@Body() createRideDto: CreateRideDto, @Req() request: Request) {
     try {
-      return await this.rideService.createRide(createRideDto, driver_id);
+      console.log(createRideDto);
+      return await this.rideService.createRide(createRideDto, (request.user as UserRequest).id);
     } catch (error) {
       throw error;
     }
   }
 
   @Get('driver')
+  @UseGuards(JwtAuthGuards)
   async getRidesByDriver(@Req() request: Request) {
     try {
       return this.rideService.getRidesByDriver((request.user as UserRequest).id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('filter')
+  @UseGuards(JwtAuthGuards)
+  async getRidesByFilter(
+    @Query('origin') origin?: string,
+    @Query('destination') destination?: string,
+    @Query('ride_date') ride_date?: string,
+    @Query('number_of_seats') number_of_seats?: number,
+    @Query('ride_price') ride_price?: number,
+    @Query('vehicle_type') vehicle_type?: string
+  ) {
+    try {
+      return this.rideService.getRidesByFilter(origin, destination, new Date(ride_date), number_of_seats, ride_price, vehicle_type as VehicleType);
     } catch (error) {
       throw error;
     }

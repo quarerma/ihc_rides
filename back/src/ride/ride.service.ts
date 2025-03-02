@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataBaseService } from 'src/database/database.service';
 import { CreateRideDto } from './dto/create.ride.dto';
+import { VehicleType } from '@prisma/client';
 
 @Injectable()
 export class RideService {
@@ -37,6 +38,28 @@ export class RideService {
       return await this.dataBaseService.ride.findMany({
         where: {
           driver_id: user_id,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getRidesByFilter(origin?: string, destination?: string, ride_date?: Date, number_of_seats?: number, ride_price?: number, vehicle_type?: VehicleType) {
+    try {
+      return await this.dataBaseService.ride.findMany({
+        where: {
+          vehicle: vehicle_type ? { type: vehicle_type } : undefined,
+          origin: origin ? { contains: origin } : undefined,
+          destination: destination ? { contains: destination } : undefined,
+          ride_date: ride_date
+            ? {
+                gte: new Date(new Date(ride_date).getTime() - 60 * 60 * 1000), // 1 hour before
+                lte: new Date(new Date(ride_date).getTime() + 60 * 60 * 1000), // 1 hour after
+              }
+            : undefined,
+          number_of_seats: number_of_seats ? { gte: number_of_seats } : undefined,
+          ride_price: ride_price ? { lte: ride_price } : undefined,
         },
       });
     } catch (error) {
