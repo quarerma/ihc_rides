@@ -14,7 +14,7 @@ export default function SignUp() {
   const [cpfValid, setCpfValid] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [cpfError, setCpfError] = useState<string | null>(null);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [birthDate, setBirthDate] = useState<string>("");
 
   const {
@@ -135,38 +135,35 @@ export default function SignUp() {
   return (
     <div className="w-screen min-h-screen flex justify-center items-center">
       <div className="p-5 border-border md:min-w-[500px] max-md:w-full max-md:mx-5 my-10 border-2 bg-white rounded-md flex flex-col space-y-5 items-center">
-        <h1 className="text-3xl font-bold text-center">Sign Up to rebU</h1>
+        <h1 className="text-3xl font-bold text-center">Cadastre-se no rebU</h1>
         <img src="/logo.png" alt="logo" className="w-16 h-16" />
         {step === 1 ? (
           <div className="w-full flex flex-col space-y-3">
-            <div className="w-full md:flex ">
-              <div className="flex-1">
-                <Label htmlFor="first_name">First Name</Label>
+           
+                <Label htmlFor="first_name">Nome</Label>
                 <Input
                   {...register("user_firstname")}
-                  placeholder="Enter your first name"
+                  placeholder="Digite seu nome"
                 />
                 <p className="text-red-500 text-sm h-5">
                   {errors.user_firstname?.message}
                 </p>
-              </div>
-              <div className="flex-1">
-                <Label htmlFor="last_name">Last Name</Label>
+           
+           
+                <Label htmlFor="last_name">Sobrenome</Label>
                 <Input
                   {...register("user_lastname")}
-                  placeholder="Enter your last name"
+                  placeholder="Digite seu sobrenome"
                 />
                 <p className="text-red-500 text-sm h-5">
                   {errors.user_lastname?.message}
                 </p>
-              </div>
-            </div>
-            <Label htmlFor="birth_date">Birth Date</Label>
+            <Label htmlFor="birth_date">Data de Nascimento</Label>
             <Input
               value={birthDate}
-              placeholder="DD/MM/YYYY"
+              placeholder="DD/MM/AAAA"
               maxLength={10}
-              onChange={handleDateChange}
+              onChange={(e) => setBirthDate(e.target.value)}
             />
             <p className="text-red-500 text-sm h-5">
               {errors.birth_date?.message}
@@ -176,57 +173,56 @@ export default function SignUp() {
               {...register("cpf")}
               placeholder="000.000.000-00"
               maxLength={14}
-              onChange={handleCPFChange}
             />
             <p className="text-red-500 text-sm h-5">
               {cpfError || errors.cpf?.message}
             </p>
             <Button
-              onClick={handleCPFValidation}
+              onClick={() => setStep(2)}
               disabled={!allFieldsFilledStep1 || loading}
             >
-              Next
+              Próximo
             </Button>
             <Button variant="link" onClick={() => navigate("/login")}>
-              Return to Login
+              Voltar para o Login
             </Button>
           </div>
         ) : (
           <form
             className="w-full flex flex-col space-y-3"
-            onSubmit={handleSubmit(handleSignUp)}
+            onSubmit={handleSubmit(() => navigate("/login"))}
           >
-            <Label htmlFor="email">Email</Label>
-            <Input {...register("email")} placeholder="Enter your email" />
+            <Label htmlFor="email">E-mail</Label>
+            <Input {...register("email")} placeholder="Digite seu e-mail" />
             <p className="text-red-500 text-sm h-5">
               {errors.email?.message || emailError}
             </p>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Senha</Label>
             <Input
               type="password"
               {...register("password")}
-              placeholder="Enter your password"
+              placeholder="Digite sua senha"
             />
             <p className="text-red-500 text-sm h-5">
               {errors.password?.message}
             </p>
-            <Label htmlFor="confirm_password">Confirm Password</Label>
+            <Label htmlFor="confirm_password">Confirme sua Senha</Label>
             <Input
               type="password"
               {...register("confirm_password")}
-              placeholder="Confirm your password"
+              placeholder="Confirme sua senha"
             />
             <p className="text-red-500 text-sm h-5">
               {errors.confirm_password?.message}
             </p>
             <Button type="submit" disabled={!allFieldsFilledStep2 || loading}>
-              {loading ? "Signing Up..." : "Sign Up"}
+              {loading ? "Cadastrando..." : "Cadastrar"}
             </Button>
             <Button variant="link" onClick={() => setStep(1)}>
-              Back
+              Voltar
             </Button>
             <Button variant="link" onClick={() => navigate("/login")}>
-              Return to Login
+              Voltar para o Login
             </Button>
           </form>
         )}

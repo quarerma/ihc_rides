@@ -24,36 +24,36 @@ export default function NavigationMenu() {
 
   const menuItems = [
     {
-      name: "Security",
-      description: "Manage your security settings",
+      name: "Segurança",
+      description: "Gerencie suas configurações de segurança",
       icon: <Lock />,
       path: "security",
     },
     ...(user?.role === "DRIVER"
       ? [
           {
-            name: "Vehicles",
-            description: "View and manage your vehicles",
+            name: "Veículos",
+            description: "Veja e gerencie seus veículos",
             icon: <Car />,
             path: "vehicles",
           },
         ]
       : []),
     {
-      name: "Address",
-      description: "Update your address information",
+      name: "Endereço",
+      description: "Atualize suas informações de endereço",
       icon: <MapPin />,
       path: "address",
     },
     {
-      name: "Payments",
-      description: "Manage your payment methods",
+      name: "Pagamentos",
+      description: "Gerencie seus métodos de pagamento",
       icon: <CreditCard />,
       path: "payments",
     },
     {
-      name: "Documents",
-      description: "Access your important documents",
+      name: "Documentos",
+      description: "Acesse seus documentos importantes",
       icon: <FileText />,
       path: "documents",
     },
@@ -99,7 +99,9 @@ export default function NavigationMenu() {
           <LogOut />
           <div className="flex flex-col items-start">
             <span className="text-lg font-medium text-start">Logout</span>
-            <p className="text-sm text-gray-500">Sign out of your account</p>
+            <p className="text-sm text-gray-500">
+              Encerre sua sessão e saia da sua conta
+            </p>
           </div>
         </div>
         <ChevronRight className="text-gray-400" />

@@ -10,10 +10,10 @@ import { logout } from "@/utils/logout";
 import { useUserSession } from "@/hooks/session";
 
 const navLinks = [
-  { to: "/", label: "Home", icon: Home },
-  { to: "/rides", label: "Rides", icon: Car },
-  { to: "activities", label: "Activities", icon: Calendar },
-  { to: "/account", label: "Account", icon: User },
+  { to: "/", label: "Principal", icon: Home },
+  { to: "/rides", label: "Caronas", icon: Car },
+  { to: "activities", label: "Atividade", icon: Calendar },
+  { to: "/account", label: "Perfil", icon: User },
 ];
 
 export default function PageLayout({ children }: React.PropsWithChildren) {

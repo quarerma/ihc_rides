@@ -52,17 +52,17 @@ export default function Login() {
           <div className="w-full">
             <Label htmlFor="email">Email</Label>
             <Input
-              placeholder="Enter your email"
+              placeholder="Preencha o email"
               type="email"
               {...register("email")}
             />
             <p className="text-red-500 text-sm h-5">{errors.email?.message}</p>
           </div>
           <div className="w-full">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Senha</Label>
             <Input
               type="password"
-              placeholder="Enter your password"
+              placeholder="Preencha a senha"
               {...register("password")}
             />
             <p className="text-red-500 text-sm h-5">
@@ -78,12 +78,12 @@ export default function Login() {
         </form>
         <div className="flex justify-between w-full items-baseline">
           <span className="text-sm text-primary cursor-pointer">
-            Forgot password?
+            Esqueceu a senha?
           </span>
           <h1 className="text-sm">
-            Don't have an account?{" "}
+            Não tem uma conta?{" "}
             <Link to="/signup" className="text-sm text-primary cursor-pointer">
-              Sign up
+              Cadastre-se
             </Link>
           </h1>
         </div>

@@ -116,17 +116,17 @@ export default function CreateVehicleDialog({
           {step === 1 && (
             <>
               <div>
-                <Label>Type</Label>
+                <Label>Tipo</Label>
                 <Select
                   onValueChange={(value) => setValue("type", value as any)}
                   value={watch("type")}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select vehicle type" />
+                    <SelectValue placeholder="Seleciona tipo de Veículo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="CAR">Car</SelectItem>
-                    <SelectItem value="MOTORCYCLE">Motorcycle</SelectItem>
+                    <SelectItem value="CAR">Carro</SelectItem>
+                    <SelectItem value="MOTORCYCLE">Motocicleta</SelectItem>
                     <SelectItem value="VAN">Van</SelectItem>
                   </SelectContent>
                 </Select>
@@ -136,29 +136,35 @@ export default function CreateVehicleDialog({
               </div>
 
               <div>
-                <Label>Brand</Label>
-                <Input {...register("brand")} placeholder="Vehicle brand..." />
+                <Label>Marca</Label>
+                <Input
+                  {...register("brand")}
+                  placeholder="Marca do veículo..."
+                />
                 <p className="text-red-500 text-sm  h-5">
                   {errors.brand?.message}
                 </p>
               </div>
 
               <div>
-                <Label>Model</Label>
-                <Input {...register("model")} placeholder="Vehicle model..." />
+                <Label>Modelo</Label>
+                <Input
+                  {...register("model")}
+                  placeholder="Modelo do veículo..."
+                />
                 <p className="text-red-500 text-sm  h-5">
                   {errors.model?.message}
                 </p>
               </div>
 
               <div>
-                <Label>Fabrication Year</Label>
+                <Label>Ano de Fabricação</Label>
                 <Input
                   type="text"
                   {...register("fabrication_year", {
                     pattern: {
                       value: /^\d{4}$/,
-                      message: "Enter a valid 4-digit year",
+                      message: "Digite um ano válido",
                     },
                   })}
                   placeholder="YYYY"
@@ -176,15 +182,15 @@ export default function CreateVehicleDialog({
               </div>
 
               <div>
-                <Label>Color</Label>
-                <Input {...register("color")} placeholder="Vehicle color..." />
+                <Label>Cor</Label>
+                <Input {...register("color")} placeholder="Cor do veículo..." />
                 <p className="text-red-500 text-sm  h-5">
                   {errors.color?.message}
                 </p>
               </div>
 
               <div>
-                <Label>Plate</Label>
+                <Label>Placa</Label>
                 <Input {...register("plate")} placeholder="AAA1A11" />
                 <p className="text-red-500 text-sm  h-5">
                   {errors.plate?.message}
@@ -193,7 +199,7 @@ export default function CreateVehicleDialog({
 
               <div className="flex justify-end">
                 <Button type="button" onClick={handleNextStep}>
-                  Next <ArrowRight className="ml-2" />
+                  Próximo <ArrowRight className="ml-2" />
                 </Button>
               </div>
             </>
@@ -202,7 +208,7 @@ export default function CreateVehicleDialog({
           {step === 2 && (
             <>
               <div>
-                <Label>CRLV - Emission Date</Label>
+                <Label>CRLV - Data de Emissão</Label>{" "}
                 <Input
                   type="text"
                   placeholder="DD/MM/YYYY"
@@ -216,7 +222,7 @@ export default function CreateVehicleDialog({
               </div>
 
               <div>
-                <Label>CRLV - Expiration Date</Label>
+                <Label>CRLV - Data de Expiração</Label>{" "}
                 <Input
                   type="text"
                   placeholder="DD/MM/YYYY"
@@ -230,7 +236,7 @@ export default function CreateVehicleDialog({
               </div>
 
               <div>
-                <Label>CRLV - Issued By</Label>
+                <Label>CRLV - Emitido Por</Label>{" "}
                 <Input
                   {...register("crlv.issued_by")}
                   placeholder="Issuing authority..."
@@ -242,10 +248,11 @@ export default function CreateVehicleDialog({
 
               <div className="flex justify-between">
                 <Button type="button" onClick={() => setStep(1)}>
-                  <ArrowLeft className="mr-2" /> Back
+                  <ArrowLeft className="mr-2" /> Voltar
                 </Button>
                 <Button type="submit" disabled={loading}>
-                  {loading ? "Submitting..." : "Submit"}{" "}
+                  {carregando ? "Enviando..." : "Enviar"}{" "}
+                  <Check className="ml-2" />
                   <Check className="ml-2" />
                 </Button>
               </div>
