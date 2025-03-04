@@ -48,23 +48,23 @@ export default function SearchRideDrawer() {
         </div>
         <div>
           <Label>Origem</Label>
-          <Input type="text" placeholder="Enter origin" />
+          <Input type="text" placeholder="Insira a Origem" />
         </div>
         <div>
           <Label>Destino</Label>
-          <Input type="text" placeholder="Enter destiny" />
+          <Input type="text" placeholder="Insira o destino" />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>Preço Máximo ($)</Label>
-            <Input type="number" placeholder="Max cost" />
+            <Input type="number" placeholder="Insira o valor" />
           </div>
           <div>
             <Label>Assentos Mínimos</Label>
-            <Input type="number" placeholder="Min seats" />
+            <Input type="number" placeholder="Insira o valor" />
           </div>
         </div>
-        <Button className="w-full">Search</Button>
+        <Button className="w-full">Buscar</Button>
       </DrawerContent>
     </Drawer>
   );
