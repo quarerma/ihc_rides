@@ -2,7 +2,7 @@
 - Instale o Node.js seguindo as instruções nesse [link](https://www.alura.com.br/artigos/como-instalar-node-js-windows-linux-macos?srsltid=AfmBOooYKqIZ5-tYgWK3ZGySw4fhS2IhnbMTBKf7MgDmCxFJAlFdJ3f7).
 - Baixe o código fonte e abraum terminal na pasta raiz.
 - Para executar o back:
-  1. Excute os seguintes comandos para instalar as dependências:
+  1. Execute os seguintes comandos para instalar as dependências:
   ```
   cd ./back/
   ```
@@ -19,7 +19,7 @@
   nest start --env-file .env
   ```
 - Para executar o front:
-  1. Excute os seguintes comandos para instalar as dependências:
+  1. Execute os seguintes comandos para instalar as dependências:
   ```
   cd ./front/
   ```
