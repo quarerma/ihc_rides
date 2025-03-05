@@ -16,6 +16,10 @@
   ```
   3. Execute este comando para rodar o código:
   ```
+  npm run start:dev
+  ```
+  4. Caso o comando anterior apresente algum erro relacionado a falta de _secret key_, execute este comando para rodar o código:
+  ```
   nest start --env-file .env
   ```
 - Para executar o front:
